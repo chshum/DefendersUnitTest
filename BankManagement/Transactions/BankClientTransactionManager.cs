@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace BankManagement.Transactions
 {
-    public class BankClientManager
+    public class BankClientTransactionManager
     {
         private List<IBankTransaction> _transactions;
-        private BankDb _bankDb;
-        private readonly CustomerQueryExecutor _queryExecutor;
+        private IBankDb _bankDb;
+        private readonly ICustomerQueryExecutor _queryExecutor;
 
-        public BankClientManager(
-            BankDb BankDb,
-            CustomerQueryExecutor customerQueryExecutor,
+        public BankClientTransactionManager(
+            IBankDb BankDb,
+            ICustomerQueryExecutor customerQueryExecutor,
             List<IBankTransaction> transactions)
         {
             _transactions = transactions;

@@ -51,6 +51,20 @@ namespace BankManagementTests
         }
 
         [TestMethod]
+        [Ignore]
+        public void Bad_test_example()
+        {
+            this.Given(_ => A_premium_customer_in_real_db()) //bad! we dont want IO dependenceis in our code, it should run isolated and in any envirnoment. 
+                .And(_ => A_customer_in_debt())
+                .When(_ => Getting_premium_customers())
+                .And(_ => Converting_their_balance_to_NIS_from_real_data()) /// bad! we dont want to have A. external dependenceis and B. long running tests with REST calls
+                .Then(_ => The_number_of_customers_should_be(1))
+                .And(_ => The_balance_should_be(200)) // Bad! wWe are testing 2 different things here, nubmer of customers and balance (this is not a hard rule, should be based on dev judgement)
+                .BDDfy();
+        }
+
+
+        [TestMethod]
         public void Get_premium_customers_should_Ignore_customers_in_debt()
         {
             this.Given(_ => A_premium_customer())
@@ -123,12 +137,28 @@ namespace BankManagementTests
             _context.Customers.Add(customer);
         }
 
+
+        private void The_balance_should_be(int v)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Converting_their_balance_to_NIS_from_real_data()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void A_premium_customer_in_real_db()
+        {
+            throw new NotImplementedException();
+        }
+
         private class Context
         {
             public Bank Bank => BankDb.Bank;
 
             public List<BankCustomer> Customers => BankDb.BankCustomers;
-            public CustomerQueryExecutor QueryExecutor { get; internal set; }
+            public ICustomerQueryExecutor QueryExecutor { get; internal set; }
             public BankDb BankDb { get; internal set; }
             public IEnumerable<BankCustomer> PriorityCustomers { get; internal set; }
         }

@@ -9,6 +9,11 @@ using System.Linq;
 
 namespace BankManagement
 {
+    /// <summary>
+    /// One option to test code is to run the actual program. however, the more the programs grows, the more complicated it will be to simulate a specific scenario, 
+    /// and it will not be possible to reposudce in sterile environments in a consistent manner.
+    /// its also much harder to test large numbers of cases.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)

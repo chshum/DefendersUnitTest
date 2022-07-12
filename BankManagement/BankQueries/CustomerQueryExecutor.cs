@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace BankManagement.BankQueries
 {
-    public class CustomerQueryExecutor
+    public class CustomerQueryExecutor : ICustomerQueryExecutor
     {
         public int c_priorityAccountCalueNis = 20000;
         private ICurrencyConverter _converter;
-        private readonly BankDb _bankDb;
+        private readonly IBankDb _bankDb;
 
-        public CustomerQueryExecutor(ICurrencyConverter currencyConverter, BankDb bankDb)
+        public CustomerQueryExecutor(ICurrencyConverter currencyConverter, IBankDb bankDb)
         {
             _converter = currencyConverter;
             _bankDb = bankDb;
@@ -27,7 +27,7 @@ namespace BankManagement.BankQueries
             var bankAccount = _bankDb.BankCustomers
                         .SelectMany(x => x.BankAccounts)
                         .FirstOrDefault(x => x.AccountNumber == accountNumber);
-            
+
             return Task.FromResult(bankAccount);
         }
 

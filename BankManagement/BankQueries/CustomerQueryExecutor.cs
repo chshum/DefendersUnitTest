@@ -4,7 +4,6 @@
 
 using BankManagement.Models;
 using BankManagement.Storage;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,15 +14,26 @@ namespace BankManagement.BankQueries
     {
         public int c_priorityAccountCalueNis = 20000;
         private ICurrencyConverter _converter;
+        private readonly BankDb _bankDb;
 
-        public CustomerQueryExecutor(ICurrencyConverter currencyConverter)
+        public CustomerQueryExecutor(ICurrencyConverter currencyConverter, BankDb bankDb)
         {
             _converter = currencyConverter;
+            _bankDb = bankDb;
         }
 
-        public async Task<IEnumerable<BankCustomer>> GetPriorityCustomers(BankDb bankDb)
+        public Task<BankAccount> GetBankAccount(int accountNumber)
         {
-            var priorityCustomersTasks = bankDb.BankCustomers
+            var bankAccount = _bankDb.BankCustomers
+                        .SelectMany(x => x.BankAccounts)
+                        .FirstOrDefault(x => x.AccountNumber == accountNumber);
+            
+            return Task.FromResult(bankAccount);
+        }
+
+        public async Task<IEnumerable<BankCustomer>> GetPriorityCustomers()
+        {
+            var priorityCustomersTasks = _bankDb.BankCustomers
                 .Select(async customer =>
                 {
                     var isPriority = await IsPriorityCustomer(customer);

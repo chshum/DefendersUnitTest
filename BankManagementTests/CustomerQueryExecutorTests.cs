@@ -8,6 +8,7 @@ using BankManagement.Storage;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,22 +29,24 @@ namespace BankManagementTests
                 .Setup(x => x.GetCurrencyValue(It.IsAny<Currency>(), It.IsAny<Currency>()))
                 .Returns<Currency, Currency>((from, to) => Task.FromResult((double) 1));
 
-            _context = new Context
-            {
-                Customers = new List<BankCustomer>(),
-                Bank = new Bank
+            var customers = new List<BankCustomer>();
+            var bank = new Bank
                 {
                     BankName = "TestBank",
                     InternationalBankCode = 101010,
                     LocalBankCode = 10
-                },
-                QueryExecutor = new CustomerQueryExecutor(currencyConverterMock.Object)
+                };
+            
+            var bankDb = new BankDb
+            {
+                BankCustomers = customers,
+                Bank = bank
             };
 
-            _context.BankDb = new BankDb
+            _context = new Context
             {
-                BankCustomers = _context.Customers,
-                Bank = _context.Bank
+                QueryExecutor = new CustomerQueryExecutor(currencyConverterMock.Object, bankDb),
+                BankDb = bankDb
             };
         }
 
@@ -84,7 +87,7 @@ namespace BankManagementTests
         [When]
         private async Task Getting_premium_customers()
         {
-            _context.PremiumCustomers = await _context.QueryExecutor.GetPriorityCustomers(_context.BankDb);
+            _context.PriorityCustomers = await _context.QueryExecutor.GetPriorityCustomers();
         }
 
         [When]
@@ -99,13 +102,14 @@ namespace BankManagementTests
         [Then]
         private void The_number_of_customers_should_be(int numberOfCustomers)
         {
-            _context.PremiumCustomers.Count().Should().Be(numberOfCustomers);
+            _context.PriorityCustomers.Count().Should().Be(numberOfCustomers);
         }
 
         private void CreateCustomer(double balance)
         {
             var customer = new BankCustomer
             {
+                CustomerId = Guid.NewGuid().ToString(),
                 BankAccounts = new List<BankAccount>
                 {
                     new BankAccount
@@ -121,12 +125,12 @@ namespace BankManagementTests
 
         private class Context
         {
-            public Bank Bank { get; set; }
+            public Bank Bank => BankDb.Bank;
 
-            public List<BankCustomer> Customers { get; set; }
+            public List<BankCustomer> Customers => BankDb.BankCustomers;
             public CustomerQueryExecutor QueryExecutor { get; internal set; }
             public BankDb BankDb { get; internal set; }
-            public IEnumerable<BankCustomer> PremiumCustomers { get; internal set; }
+            public IEnumerable<BankCustomer> PriorityCustomers { get; internal set; }
         }
     }
 }

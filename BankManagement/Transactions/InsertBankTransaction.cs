@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace BankManagement.Transactions
 {
-    public class Withdraw
+    public class InsertBankTransaction : IBankTransaction
     {
-        public Task Transact(BankAccount account, long amount)
+        public BankTransactionType GetName() => BankTransactionType.Insert;
+
+        public Task Transact(BankAccount account, double amount)
         {
-            account.Balance -= amount;
+            account.Balance += amount;
             return Task.CompletedTask;
         }
     }

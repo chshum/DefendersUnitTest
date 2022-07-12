@@ -1,11 +1,14 @@
-﻿using System;
+﻿// ---------------------------------------------------------------------------- 
+// Copyright (c) Microsoft Corporation. All rights reserved. 
+// ----------------------------------------------------------------------------
 using System.Collections.Generic;
-using System.Text;
 
 namespace BankManagement.Models
 {
     public class BankCustomer
     {
+        public string CustomerId { get; set; }
+        
         public string FirstName { get; set; }
         
         public string LastName { get; set; }

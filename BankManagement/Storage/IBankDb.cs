@@ -7,14 +7,11 @@ using System.Collections.Generic;
 
 namespace BankManagement.Storage
 {
-    public class BankDb : IBankDb
+    public interface IBankDb
     {
-        public Bank Bank { get; set; }
-
-        public List<BankBranch> BankBranches { get; set; }
-
-        public List<BankCustomer> BankEmployees { get; set; }
-
-        public List<BankCustomer> BankCustomers { get; set; }
+        Bank Bank { get; set; }
+        List<BankBranch> BankBranches { get; set; }
+        List<BankCustomer> BankCustomers { get; set; }
+        List<BankCustomer> BankEmployees { get; set; }
     }
 }

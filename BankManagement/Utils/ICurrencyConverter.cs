@@ -5,7 +5,7 @@
 using BankManagement.Models;
 using System.Threading.Tasks;
 
-namespace BankManagement.BankQueries
+namespace BankManagement.Utils
 {
     public interface ICurrencyConverter
     {

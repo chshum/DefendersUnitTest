@@ -26,7 +26,7 @@ namespace BankManagement.Transactions
             _queryExecutor = customerQueryExecutor;
         }
 
-        public async Task<bool> performAction(int accountId, BankTransactionType type, double amount)
+        public async Task<bool> PerformAction(int accountId, BankTransactionType type, double amount)
         {
             var bankAccount = await _queryExecutor.GetBankAccount(accountId);
             if (bankAccount == null)

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BankManagement.BankQueries
+namespace BankManagement.Utils
 {
     public class CurrencyConverter : ICurrencyConverter
     {
